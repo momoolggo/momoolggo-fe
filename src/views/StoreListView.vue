@@ -77,7 +77,7 @@ const goToDetail = (id) => {
 <template>
 <div class="store-list-view">
     <header class="header">
-        <h2>(카테고리 이름)</h2>
+        <h2>(카테고리 이름)</h2>ㅇ
     </header>
 
     <div class="list-container">
