@@ -33,18 +33,18 @@ const goMypage   = () => router.push('/mypage')
 
       <!-- 가운데 — 주소 -->
       <div class="header_address">
-        <i class="bi bi-geo-alt-fill"></i>
+        <i class="bi bi-geo-alt-fill address_icon"></i>
         <span class="address_text">배달 받을 주소를 입력하세요</span>
       </div>
 
       <!-- 오른쪽 — 네비 -->
       <nav class="header_nav">
         <button class="nav_icon_btn" @click="goFavorite">
-          <i class="bi bi-heart"></i>
+          <i class="bi bi-heart nav_icon"></i>
           <span class="nav_label">찜하기</span>
         </button>
         <button class="nav_icon_btn" @click="goCart">
-          <i class="bi bi-cart4"></i>
+          <i class="bi bi-cart4 nav_icon"></i>
           <span class="nav_label">장바구니</span>
         </button>
 
@@ -75,6 +75,7 @@ const goMypage   = () => router.push('/mypage')
   z-index: 100;
   width: 100%;
   background: var(--white);
+  background-color: #FEFAEE;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-header);
 }
@@ -86,26 +87,31 @@ const goMypage   = () => router.push('/mypage')
   height: 60px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
 }
 .logo_link { flex-shrink: 0; }
-.header_logo { height: 36px; }
+.header_logo { 
+  height: 60px;
+  display: block;}
 
 .header_address {
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   cursor: pointer;
+  margin: 0 auto;
   padding: 8px 14px;
   border: 1.5px solid var(--border);
   border-radius: 20px;
-  max-width: 360px;
+  max-width: 400px;
   transition: border-color 0.15s;
 }
 .header_address:hover { border-color: var(--primary); }
 .address_icon { font-size: 14px; }
-.address_text { font-size: 13px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.address_text { font-size: 13px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 
 .header_nav {
   display: flex;
