@@ -94,7 +94,8 @@ const signin = async () => {
             @keyup.enter="signin"
           />
           <button class="pw_toggle" @click="state.showPw = !state.showPw">
-            {{ state.showPw ? '🙈' : '👁️' }}
+            <i :class="state.showPw ? 'bi bi-eye' : 'bi bi-eye-slash'"></i> <!--비밀번호 숨김/표시 아이콘-->
+          <!--{{ state.showPw ? '🙈' : '👁️' }}-->
           </button>
         </div>
 

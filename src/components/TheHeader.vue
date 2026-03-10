@@ -33,18 +33,18 @@ const goMypage   = () => router.push('/mypage')
 
       <!-- 가운데 — 주소 -->
       <div class="header_address">
-        <span class="address_icon">📍</span>
+        <i class="bi bi-geo-alt-fill"></i>
         <span class="address_text">배달 받을 주소를 입력하세요</span>
       </div>
 
       <!-- 오른쪽 — 네비 -->
       <nav class="header_nav">
         <button class="nav_icon_btn" @click="goFavorite">
-          <span class="nav_icon">🤍</span>
+          <i class="bi bi-heart"></i>
           <span class="nav_label">찜하기</span>
         </button>
         <button class="nav_icon_btn" @click="goCart">
-          <span class="nav_icon">🛒</span>
+          <i class="bi bi-cart4"></i>
           <span class="nav_label">장바구니</span>
         </button>
 
@@ -78,6 +78,7 @@ const goMypage   = () => router.push('/mypage')
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-header);
 }
+
 .header_inner {
   max-width: 1200px;
   margin: 0 auto;
