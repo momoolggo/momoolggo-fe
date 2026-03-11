@@ -14,7 +14,7 @@ const router = createRouter({
     // ── 매장 목록
     { path: '/storelist',         component: () => import('@/views/StoreListView.vue') },
     
-    {path: '/store/:id', 
+    { path: '/store/:id', 
       component: () => import('@/views/StoreDetailView.vue')},
 
     // ── 사장 (추후 구현)
