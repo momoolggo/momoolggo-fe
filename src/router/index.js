@@ -6,6 +6,11 @@ import MyPageOrdersView   from '@/views/mypage/MyPageOrdersView.vue'
 import MyPageReviewView   from '@/views/mypage/MyPageReviewView.vue'
 import MyPageCouponView   from '@/views/mypage/MyPageCouponView.vue'
 import MyPageCsView       from '@/views/mypage/MyPageCsView.vue'
+import AboutView   from '@/views/footer/AboutView.vue'
+import TermsView   from '@/views/footer/TermsView.vue'
+import PrivacyView from '@/views/footer/PrivacyView.vue'
+import NoticeView  from '@/views/footer/NoticeView.vue'
+import PartnerView from '@/views/footer/PartnerView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +51,13 @@ const router = createRouter({
     { path: '/mypage/review',   component: MyPageReviewView  },
     { path: '/mypage/coupon',   component: MyPageCouponView  },
     { path: '/mypage/cs',       component: MyPageCsView      },
+
+    //푸터 링크
+    { path: '/about',   component: AboutView   },
+    { path: '/terms',   component: TermsView   },
+    { path: '/privacy', component: PrivacyView },
+    { path: '/notice',  component: NoticeView  },
+    { path: '/partner', component: PartnerView },
   ],
 })
 
