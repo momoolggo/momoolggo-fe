@@ -16,7 +16,7 @@ const state = reactive({
     { label: '패스트푸드'},
     { label: '야식'},
 ]
-  
+
 });
 const goCategory = (label) => {
   router.push({ path: '/storelist', query: { category: label } })
@@ -25,7 +25,7 @@ const goCategory = (label) => {
 
 <template>
   <main class="home">
-    
+
   <img src="@/assets/뭐물꼬_마스코트.png" alt="뭐물꼬 마스코트" class="mascot_img" />
 
     <div class="wrapper">
