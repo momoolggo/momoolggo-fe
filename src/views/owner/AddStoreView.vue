@@ -1,7 +1,8 @@
 <script setup>
 import { reactive } from 'vue'; // reactive 임포트
 import { useRouter } from 'vue-router';
-import Sidebar from '@/components/Sidebar.vue';
+
+import Sidebar from '@/components/Sidebar.vue'; 
 import { useStore } from '@/stores/useStore';
 import axios from 'axios';
 
@@ -23,33 +24,29 @@ const state = reactive({
 const handleCancel = () => router.back();
 
 const handleSubmit = async () => {
-  // 1. 필수값 체크
-  if (!state.form.storeName) {
+  if (!storeData.value.name) {
     alert("가게 상호명을 입력해주세요.");
     return;
   }
 
-  // 2. 백엔드로 보낼 데이터 준비
-  // state.form의 데이터를 복사하고, 누락된 필드를 채워 넣습니다.
-  const payload = {
-    ...state.form,
-    // 사진 로직이 아직 없다면 임시로 빈 문자열이나 기본값을 넣습니다.
-    storePic: state.form.storePic || 'default.jpg',
-    // userId는 보통 프론트에서 보내지 않고 백엔드 토큰에서 가져오지만, 
-    // 백엔드 DTO에 필수라면 일단 0으로라도 넣어보거나 
-    // 필요 없다면 백엔드에서 @AuthenticationPrincipal 등으로 처리해야 합니다.
-    userId: 0 
-  };
-
   try {
-    // 3. 서버로 전송
-    const response = await axios.post('http://localhost:8080/api/owner/store', payload);
-    
+    await axios.post('/api/owner/store', {
+      userId: 3,  // 로그인된 사용자 ID
+      storeName: storeData.value.name,
+      businessNumber: storeData.value.businessNumber,
+      businessName: storeData.value.businessOwner,
+      location: storeData.value.address + ' ' + storeData.value.addressDetail,
+      storeTel: storeData.value.phone,
+      storeInfo: storeData.value.description,
+      storePic: ''
+    }, { withCredentials: true });
+
+    store.addStore(storeData.value.name);
     alert("가게 등록이 완료되었습니다.");
-    router.push('/ownerservice');
-  } catch (error) {
-    console.error("등록 실패:", error);
-    alert("서버 연결에 실패했습니다.");
+    router.push('/owner/order');
+  } catch (err) {
+    console.error(err);
+    alert("가게 등록에 실패했습니다.");
   }
 };
 </script>
