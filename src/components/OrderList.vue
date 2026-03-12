@@ -43,11 +43,11 @@
       type: Array,
       default: () => [
         // 예시용 데이터 (실제 API 연결 전까지 보임)
-        { no: '005', time: '10:26', duration: '7분', address: '대구 광역시 범어동 774-16 507호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'WAITING' },
-        { no: '004', time: '10:26', duration: '7분', address: '대구 광역시 범어동 774-16 507호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'PROGRESS' },
-        { no: '003', time: '10:26', duration: '7분', address: '대구 광역시 범어동 774-16 507호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'PROGRESS' },
-        { no: '002', time: '10:26', duration: '7분', address: '대구 광역시 범어동 774-16 507호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'SHIPPING' },
-        { no: '001', time: '10:26', duration: '7분', address: '대구 광역시 범어동 774-16 507호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'CANCEL' },
+        { no: '005', time: '10:26', duration: '7분', address: '대구 광역시 범어동 123-45 101호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'WAITING' },
+        { no: '004', time: '10:26', duration: '7분', address: '대구 광역시 범어동 123-45 101호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'PROGRESS' },
+        { no: '003', time: '10:26', duration: '7분', address: '대구 광역시 범어동 123-45 101호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'PROGRESS' },
+        { no: '002', time: '10:26', duration: '7분', address: '대구 광역시 범어동 123-45 101호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'SHIPPING' },
+        { no: '001', time: '10:26', duration: '7분', address: '대구 광역시 범어동 123-45 101호', menu: '참돔 오차즈케 외 1건', price: '17,000원', status: 'CANCEL' },
       ]
     }
   });
