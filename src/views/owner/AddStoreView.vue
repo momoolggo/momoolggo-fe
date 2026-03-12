@@ -24,7 +24,7 @@ const state = reactive({
 const handleCancel = () => router.back();
 
 const handleSubmit = async () => {
-  if (!storeData.value.name) {
+  if (!state.form.storeName) {
     alert("가게 상호명을 입력해주세요.");
     return;
   }
@@ -32,16 +32,16 @@ const handleSubmit = async () => {
   try {
     await axios.post('/api/owner/store', {
       userId: 3,  // 로그인된 사용자 ID
-      storeName: storeData.value.name,
-      businessNumber: storeData.value.businessNumber,
-      businessName: storeData.value.businessOwner,
-      location: storeData.value.address + ' ' + storeData.value.addressDetail,
-      storeTel: storeData.value.phone,
-      storeInfo: storeData.value.description,
+      storeName: state.form.storeName,
+      businessNumber: state.form.businessNumber,
+      businessName: state.form.businessOwner,
+      location: state.form.address + ' ' + state.form.addressDetail,
+      storeTel: state.form.phone,
+      storeInfo: state.form.description,
       storePic: ''
     }, { withCredentials: true });
 
-    store.addStore(storeData.value.name);
+    store.addStore(state.form.name);
     alert("가게 등록이 완료되었습니다.");
     router.push('/owner/order');
   } catch (err) {
