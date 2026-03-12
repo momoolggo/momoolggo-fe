@@ -10,10 +10,12 @@ const selectedOrder = ref(null);
 // API로 주문 리스트 조회 (스토어 ID는 실제 환경에 맞게 조정)
 const fetchOrders = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/owner/order', {
-      params: { store_id: 1 } // 실제 store_id로 변경하세요
-    });
-    orders.value = response.data.data; 
+    const response = await axios.get('/api/owner/order', {
+  params: { store_id: 1 },
+  withCredentials: true
+});
+    console.log(response.data); // 여기에 추가
+    orders.value = response.data.resultdata ?? []; 
   } catch (error) {
     console.error("주문 조회 실패:", error);
   }
