@@ -31,6 +31,9 @@ const router = createRouter({
     // 장바구니
     { path: '/cart',           component: () => import('@/views/service/CartView.vue') },
 
+    //찜 목록
+    {path: '/like',        component: () => import('@/views/service/LikeView.vue') },
+
     // ── 사장 (추후 구현)
     { path: '/ownerservice',     component: () => import('@/views/owner/OwnerOrderView.vue') },
     { path: '/owner/addstore',     component: () => import('@/views/owner/AddStoreView.vue') },

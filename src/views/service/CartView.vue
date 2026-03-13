@@ -15,7 +15,6 @@ const state = reactive({
 const loadCart = async () => {//가짜데이터
     state.storeName = "스시세츠 - 동성로점";
     state.storeId = 3;
-
     state.cartItems = [
         {
             id: 1,
