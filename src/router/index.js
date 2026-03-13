@@ -29,12 +29,13 @@ const router = createRouter({
     { path: '/store/:id',           component: () => import('@/views/store/StoreDetailView.vue')},
 
     // 장바구니
-    { path: '/cart',           component: () => import('@/views/service/CartView.vue') },
+    { path: '/cart',           component: () => import('@/views/servicee/CartView.vue') },
+
+    //찜 목록
+    {path: '/favorite',        component: () => import('@/views/servicee/FavoriteView.vue') },
 
     // ── 사장 (추후 구현)
     { path: '/ownerservice',     component: () => import('@/views/owner/OwnerOrderView.vue') },
-    
-    
 
 
     // ── 관리자 (추후 구현)
