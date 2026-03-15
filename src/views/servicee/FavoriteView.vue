@@ -2,11 +2,11 @@
 import { reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import storeService from '@/services/storeService';
-import { useAuthStore } from '@/stores/authStore';
+import { useUserStore } from '@/stores/userStore';
 
 const router = useRouter();
-const auth = useAuthStore();
-const user = computed(() => auth.state);
+const userStore = useUserStore();
+const user = computed(() => userStore.state);
 
 const state = reactive({
   wishList: [],
@@ -26,7 +26,12 @@ const loadWishList = async () => {
     const res = await storeService.getFavorite(params);
     // 서버 응답 구조: res.resultData.list
     if (res && res.resultData) {
-      state.wishList = res.resultData.list || [];
+      // 초기 로드 시 모든 아이템에 찜 활성화 상태(isWished)를 주입합니다.
+      const list = (res.resultData.list || []).map(item => ({
+        ...item,
+        isWished: true
+      }));
+      state.wishList = list;
       state.totalCount = res.resultData.totalCount || 0;
     }
   } catch (e) {
@@ -47,18 +52,15 @@ const goPage = (page) => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// 찜 해제 (클릭 시 색상 변경 및 목록 삭제)
+// 찜 해제 (클릭 시 색상만 변경하고 목록은 유지)
 const toggleWish = async (store) => {
   try {
-    // 서버에 찜 해제 요청
-    await storeService.toggleWish(store.id);
-
-    // 1. 즉시 리스트에서 제거 (사용자 경험)
-    state.wishList = state.wishList.filter(s => s.id !== store.id);
-    // 2. 전체 개수 차감
-    state.totalCount--;
-
-    console.log(`${store.name} 찜 해제 완료`);
+    const params = {
+      userNo: user.value.userNo,
+      storeId: Number(store.id)
+    };
+    const res = await storeService.toggleFavorite(params);
+    store.isWished = res.resultData;
   } catch (e) {
     console.error('찜 해제 실패:', e);
     alert('찜 해제 중 오류가 발생했습니다.');
@@ -110,9 +112,10 @@ const goStore = (storeId) => {
             </div>
 
             <button
-              class="wish-btn active"
+              class="wish-btn"
+              :class="{ active: store.isWished }"
               @click.stop="toggleWish(store)"
-              title="찜 해제"
+              title="찜 토글"
             >
               <svg viewBox="0 0 24 24" class="heart-icon">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
