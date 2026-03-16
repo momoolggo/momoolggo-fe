@@ -23,6 +23,11 @@ import MyPageOrdersView   from '@/views/mypage/MyPageOrdersView.vue'
 import MyPageCouponView   from '@/views/mypage/MyPageCouponView.vue'
 import MyPageReviewView   from '@/views/mypage/MyPageReviewView.vue'
 import MyPageCsView       from '@/views/mypage/MyPageCsView.vue'
+import CartView           from '@/views/servicee/CartView.vue'
+import FavoriteView       from '@/views/servicee/FavoriteView.vue'
+import OrderView          from '@/views/servicee/OrderView.vue'
+import EventView          from '@/views/servicee/EventView.vue'
+import WhatKindView       from '@/views/servicee/WhatKindView.vue'
 
 const routes = [
   // ── 비로그인 공개 페이지
@@ -97,6 +102,12 @@ const routes = [
       { path: 'cs',      name: 'MyPageCs',      component: MyPageCsView      },
     ],
   },
+
+  { path: '/cart',      name: 'Cart',      component: CartView,      meta: { requiresAuth: true, role: 'CUSTOMER' } },
+  { path: '/favorite',  name: 'Favorite',  component: FavoriteView,  meta: { requiresAuth: true, role: 'CUSTOMER' } },
+  { path: '/order',     name: 'Order',     component: OrderView,     meta: { requiresAuth: true, role: 'CUSTOMER' } },
+  { path: '/event',     name: 'Event',     component: EventView,     meta: { requiresAuth: true, role: 'CUSTOMER' } },
+  { path: '/whatKind',  name: 'WhatKind',  component: WhatKindView,  meta: { requiresAuth: true, role: 'CUSTOMER' } },
 
   // ── 사장님 전용
   {
