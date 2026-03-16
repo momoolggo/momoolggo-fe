@@ -15,7 +15,11 @@ const state = reactive({
     { label: '디저트'},
     { label: '분식' },
     { label: '패스트푸드'},
+    { label: '찜 탕'},
+    { label: '치킨'},
     { label: '야식'},
+    { label: '족발'},
+    { label: '피자'},
 ]
 
 });
@@ -51,8 +55,20 @@ const goCategory = (label) => {
   <div class="item"  @click="goCategory('패스트푸드')">패스트푸드
     <img src="@/assets/햄버거.png" alt="패스트푸드"/>
   </div>
+  <div class="item"  @click="goCategory('찜 탕')">야식
+    <img src="@/assets/찜탕.png" alt="찜탕"/>
+  </div>
+  <div class="item"  @click="goCategory('치킨')">야식
+    <img src="@/assets/치킨.png" alt="치킨"/>
+  </div>
   <div class="item"  @click="goCategory('야식')">야식
     <img src="@/assets/야식.png" alt="야식"/>
+  </div>
+  <div class="item"  @click="goCategory('족발')">야식
+    <img src="@/assets/족발.png" alt="족발"/>
+  </div>
+  <div class="item"  @click="goCategory('피자')">야식
+    <img src="@/assets/피자.png" alt="피자"/>
   </div>
   </div>
 </main>
