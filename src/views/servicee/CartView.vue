@@ -178,6 +178,7 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
               <div class="store-header" @click="goStore">
                   <span class="store-icon">🍱</span>
                   <span class="store-name">{{ state.storeName }}</span>
+                  <span class="arrow-icon">❯</span>
               </div>
 
               <section class="cart-items-card">
@@ -216,7 +217,7 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
                   </div>
                   <div class="price-details">
                       <div v-for="item in state.cartItems" :key="'detail-'+item.id" class="detail-line">
-                          <span>{{ item.menuName }}</span>
+                          <span>{{ item.menuName }} x {{item.quantity}}</span>
                           <span>{{ (item.price * item.quantity).toLocaleString() }}원</span>
                       </div>
                   </div>
@@ -238,7 +239,7 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
 
               <div class="action-area">
                   <button class="order-btn" @click="goOrder">주문하기</button>
-                  <button class="clear-btn" @click="clearCart">장바구니 비우기</button>
+                  <button class="clear-btn-box" @click="clearCart">장바구니 전체 비우기</button>
               </div>
           </template>
 
@@ -246,221 +247,249 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
               <div class="empty-cart">
                   <span class="empty-icon">⚠️</span>
                   <p>담은 메뉴가 없습니다</p>
-                  <button class="order-btn secondary" @click="goStore">메뉴 담으러 가기</button>
+                  <button class="order-btn" @click="goStore">메뉴 담으러 가기</button>
               </div>
           </template>
       </div>
   </div>
-  </template>
+</template>
 
-  <style scoped>
-  .cart-page {
-      width: 100%;
-      background: #f8f9fa; /* 모바일 앱 느낌의 연회색 배경 */
-      min-height: 100vh;
-      padding-bottom: 100px;
-  }
+<style scoped>
+.cart-page {
+  width: 100%;
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
 
-  .cart-title {
-      background: #fff;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: 700;
-      border-bottom: 1px solid #eee;
-  }
+.cart-title {
+  background: #fff;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-bottom: 1px solid #eee;
+}
 
-  .cart-container {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-  }
+.cart-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-  /* 가게 이름 */
-  .store-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 4px 8px;
-  }
+/* --- [수정] 매장 헤더 호버 효과 추가 --- */
+.store-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content; /* 텍스트 길이에 맞춤 */
+}
 
-  /* 아이템 리스트 카드 */
-  .cart-items-card {
-      background: #fff;
-      border: 1px solid #e9ecef;
-      border-radius: 15px;
-      overflow: hidden;
-  }
+.store-header:hover {
+  opacity: 0.7;
+  transform: translateX(2px);
+}
 
-  .items-toolbar {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid #f1f3f5;
-  }
+.store-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #111;
+}
 
-  .toolbar-btn {
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 0.85rem;
-      cursor: pointer;
-  }
+.arrow-icon {
+  font-size: 0.8rem;
+  color: #bbb;
+}
 
-  .toolbar-btn.delete { color: #ff4d4f; }
+/* 아이템 리스트 카드 */
+.cart-items-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
 
-  .cart-item {
-      position: relative;
-      display: flex;
-      padding: 20px 16px;
-      gap: 12px;
-      border-bottom: 1px solid #f1f3f5;
-  }
+.items-toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f5;
+}
 
-  .item-img {
-      width: 85px;
-      height: 85px;
-      border-radius: 12px;
-      object-fit: cover;
-  }
+.toolbar-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-  .item-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-  }
+.toolbar-btn.delete { color: #ff4d4f; }
 
-  .item-name { font-weight: 700; font-size: 1rem; color: #222; }
-  .item-price { font-size: 0.9rem; color: #888; margin-bottom: 8px; }
+.cart-item {
+  position: relative;
+  display: flex;
+  padding: 20px 16px;
+  gap: 12px;
+  border-bottom: 1px solid #f8f9fa;
+}
 
-  .item-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-  }
+.item-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 12px;
+  object-fit: cover;
+}
 
-  .option-btn {
-      padding: 6px 12px;
-      border: 1px solid #dee2e6;
-      border-radius: 6px;
-      background: #f1f3f5;
-      font-size: 0.75rem;
-      color: #495057;
-  }
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-  .quantity-ctrl {
-      display: flex;
-      border: 1px solid #dee2e6;
-      border-radius: 6px;
-      background: #fff;
-  }
+.item-name { font-weight: 700; font-size: 1rem; color: #222; }
+.item-price { font-size: 0.9rem; color: #888; margin-bottom: 8px; }
 
-  .quantity-ctrl button {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: none;
-      cursor: pointer;
-  }
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-  .quantity-ctrl span {
-      width: 30px;
-      text-align: center;
-      line-height: 28px;
-      font-size: 0.85rem;
-      border-left: 1px solid #eee;
-      border-right: 1px solid #eee;
-  }
+.option-btn {
+  padding: 6px 12px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  background: #f8f9fa;
+  font-size: 0.75rem;
+  color: #666;
+  cursor: pointer;
+}
 
-  .item-check {
-      position: absolute;
-      top: 20px;
-      right: 16px;
-      width: 20px;
-      height: 20px;
-      accent-color: #4A90E2;
-  }
+.quantity-ctrl {
+  display: flex;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+}
 
-  /* 금액 상세 카드 */
-  .summary-card {
-      background: #fff;
-      border: 1px solid #e9ecef;
-      border-radius: 15px;
-      padding: 20px 16px;
-  }
+.quantity-ctrl button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-  .price-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 0.95rem;
-  }
+.quantity-ctrl span {
+  width: 30px;
+  text-align: center;
+  line-height: 28px;
+  font-size: 0.85rem;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+}
 
-  .price-details {
-      padding: 0 0 12px 0;
-      border-bottom: 1px solid #f1f3f5;
-      margin-bottom: 12px;
-  }
+.item-check {
+  position: absolute;
+  top: 20px;
+  right: 16px;
+  width: 22px;
+  height: 22px;
+  accent-color: #4A90E2;
+  cursor: pointer;
+}
 
-  .detail-line {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: #999;
-      margin-bottom: 4px;
-  }
+/* 금액 상세 카드 */
+.summary-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  padding: 20px 16px;
+}
 
-  .total-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 12px;
-      border-top: 2px solid #f1f3f5;
-      margin-top: 8px;
-  }
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
 
-  .total-label { font-size: 1.1rem; font-weight: 800; }
-  .total-val { font-size: 1.2rem; font-weight: 800; color: #222; }
+.price-details {
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid #f1f3f5;
+  margin-bottom: 12px;
+}
 
-  /* 하단 버튼 구역 */
-  .action-area {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-  }
+.detail-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 6px;
+}
 
-  .order-btn {
-      width: 100%;
-      padding: 16px;
-      background: #4A90E2;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-  }
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+}
 
-  .clear-btn {
-      width: 100%;
-      padding: 10px;
-      background: none;
-      border: none;
-      color: #adb5bd;
-      text-decoration: underline;
-      font-size: 0.85rem;
-  }
+.total-label { font-size: 1.1rem; font-weight: 800; }
+.total-val { font-size: 1.3rem; font-weight: 800; color: #4A90E2; }
 
-  .empty-cart {
-      text-align: center;
-      padding: 100px 0;
-  }
+/* --- [수정] 하단 버튼 구역: 비우기 버튼 디자인 강화 --- */
+.action-area {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  .empty-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
-  </style>
+.order-btn {
+  width: 100%;
+  padding: 18px;
+  background: #4A90E2;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.order-btn:active {
+  background: #357ABD;
+}
+
+.clear-btn-box {
+  width: 100%;
+  padding: 14px;
+  background: #fff;
+  color: #ff4d4f;
+  border: 1px solid #ff4d4f; /* 테두리를 주어 버튼임을 강조 */
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-btn-box:hover {
+  background: #fff1f0;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 100px 0;
+}
+</style>
