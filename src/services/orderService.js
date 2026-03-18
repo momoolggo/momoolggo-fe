@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class OrderService {
-    #url = '/api/order';
+    #url = '/order';
 
     // 주문 화면 초기 데이터 조회
     async getOrderInfo() {
@@ -14,6 +14,10 @@ class OrderService {
         const res = await axios.post(this.#url, orderData);
         return res.data;
     }
+    // 토스 결제 승인 요청
+    async confirmPayment(paymentData) {
+      const res = await axios.post('/payment/confirm', paymentData);
+      return res.data;
+  }
 }
-
 export default new OrderService();

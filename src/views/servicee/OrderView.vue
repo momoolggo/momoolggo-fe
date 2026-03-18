@@ -16,13 +16,12 @@ const state = reactive({
   totalAmount: 0,
   request: '',
   riderRequest: '',
+  payState: 1,
 })
 
-// 토스페이먼츠 위젯 인스턴스
 let widgets = null
 const isWidgetReady = ref(false)
 
-// ✅ 토스페이먼츠 SDK 동적 로드
 const loadTossScript = () => {
   return new Promise((resolve, reject) => {
     if (window.TossPayments) return resolve()
@@ -34,7 +33,6 @@ const loadTossScript = () => {
   })
 }
 
-// ✅ 토스 위젯 초기화 & 렌더링
 const initTossWidget = async (amount) => {
   const CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'
   const CUSTOMER_KEY = 'eK4YFpGSvYQvtfwVK6L3a'
@@ -72,7 +70,6 @@ const loadOrderInfo = async () => {
     state.totalAmount = data.totalAmount
   } catch (e) {
     console.error('주문 정보 로드 실패:', e)
-    // 임시 더미 데이터
     state.storeName = '테스트 가게'
     state.tel = '01012341234'
     state.address = '서울시 강남구'
@@ -104,17 +101,30 @@ const handleOrder = async () => {
   }
 
   try {
-    const orderId = `ORDER-${Date.now()}`
+    // ✅ 1. 주문 저장 → 서버에서 발급한 orderId 사용
+    const orderRes = await orderService.placeOrder({
+      request:      state.request,
+      riderRequest: state.riderRequest,
+      payState:     state.payState,
+    })
+    const orderId = String(orderRes.orderId)
+    console.log('주문 저장 성공, orderId:', orderId)
+
+    // ✅ 2. payState 저장 (success 페이지에서 사용)
+    sessionStorage.setItem('payState', state.payState)
+
+    // ✅ 3. 주문명 생성
     const orderName =
       state.items.length > 1
         ? `${state.items[0].name} 외 ${state.items.length - 1}건`
         : (state.items[0]?.name ?? '주문')
 
+    // ✅ 4. 토스 결제창 호출
     await widgets.requestPayment({
       orderId,
       orderName,
       successUrl: `${window.location.origin}/payment/success`,
-      failUrl: `${window.location.origin}/payment/fail`,
+      failUrl:    `${window.location.origin}/payment/fail`,
       customerMobilePhone: state.tel,
     })
   } catch (e) {
@@ -124,6 +134,7 @@ const handleOrder = async () => {
 }
 </script>
 
+<!-- template, style 변경 없음 -->
 <template>
   <div class="order-page">
     <h2 class="order-title">결제하기</h2>
@@ -212,34 +223,28 @@ const handleOrder = async () => {
 </template>
 
 <style scoped>
-/* 모바일 고정 레이아웃 최적화 */
 .order-page {
   max-width: 480px;
   width: 100%;
-  padding: 20px 16px 100px; /* 하단 네비게이션 고려 여백 */
+  padding: 20px 16px 100px;
   box-sizing: border-box;
   margin: 0 auto;
 }
-
 .order-title {
   text-align: left;
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 20px;
 }
-
-/* 2단 그리드에서 1단 컬럼으로 변경 */
 .order-layout {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
-
 .order-section {
   display: flex;
   flex-direction: column;
 }
-
 .store-name-row {
   display: flex;
   align-items: center;
@@ -250,44 +255,37 @@ const handleOrder = async () => {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
-
 .store-icon {
   width: 28px;
   height: 28px;
   border-radius: 6px;
 }
-
 .info-group {
   margin-bottom: 20px;
 }
-
 .section-label {
   font-size: 0.85rem;
   color: #666;
   font-weight: 600;
   margin-bottom: 8px;
 }
-
 .input-row {
   display: flex;
   gap: 8px;
 }
-
 .input-field {
   flex: 1;
-  min-width: 0; /* flex 안에서 input 뚫고 나가는 현상 방지 */
+  min-width: 0;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 0.95rem;
   background: #f9f9f9;
 }
-
 .input-field.full {
   width: 100%;
   box-sizing: border-box;
 }
-
 .change-btn {
   padding: 0 15px;
   border: 1px solid #ddd;
@@ -297,7 +295,6 @@ const handleOrder = async () => {
   cursor: pointer;
   white-space: nowrap;
 }
-
 .badge {
   background: #ff4d4f;
   color: #fff;
@@ -306,33 +303,28 @@ const handleOrder = async () => {
   border-radius: 4px;
   vertical-align: middle;
 }
-
 .price-box {
   background: #f8f9fa;
   border-radius: 12px;
   padding: 20px;
   margin: 10px 0 20px;
 }
-
 .price-row {
   display: flex;
   justify-content: space-between;
   font-size: 0.95rem;
   padding: 6px 0;
 }
-
 .price-row.total {
   margin-top: 10px;
   padding-top: 15px;
   border-top: 1px solid #eee;
   font-weight: 700;
 }
-
 .total-price {
   color: #4a90e2;
   font-size: 1.1rem;
 }
-
 .order-btn {
   width: 100%;
   padding: 16px;
@@ -345,16 +337,12 @@ const handleOrder = async () => {
   cursor: pointer;
   transition: background 0.2s;
 }
-
 .order-btn:active {
   background: #357abd;
 }
-
 .order-btn:disabled {
   background: #ccc;
 }
-
-/* 토스 위젯 내부 여백 조정 */
 #payment-method {
   margin-left: -8px;
   margin-right: -8px;
