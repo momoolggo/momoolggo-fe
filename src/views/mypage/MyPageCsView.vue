@@ -162,6 +162,8 @@ const open = () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+ 
+  
 }
 
 /*FAQ 카드*/
@@ -170,6 +172,7 @@ const open = () => {
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  margin-bottom: 8px;
 }
 
 .faq-q {
