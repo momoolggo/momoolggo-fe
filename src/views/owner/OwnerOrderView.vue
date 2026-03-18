@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, provide } from 'vue';
 import Sidebar from '@/components/owner/Sidebar.vue';
 import OrderCard from '@/components/owner/OrderCard.vue';
 import OrderList from '@/components/owner/OrderList.vue';
@@ -12,32 +12,56 @@ import { useStore } from '@/stores/useStore';
 
 const storeInfo = useStore();
 
+// 날짜 선택 (기본값: 오늘)
+const selectedDate = ref(new Date().toISOString().slice(0, 10)); // "2026-03-19" 형식
+
 const stats = ref({
   total: 0,
   waiting: 0,
+  progress: 0,
+  rider: 0,
+  shipping: 0,
   completed: 0,
   cancel: 0
 });
 
-const fetchState = async () => {
+const fetchStats = async () => {
   if (!storeInfo.myStoreId) return;
   try {
-    const response = await ownerService.getOrders(storeInfo.myStoreId, null);
-    if (response?.resultData) {
-      stats.value = response.resultData;
-    }
+    const response = await ownerService.getOrders(storeInfo.myStoreId, null, selectedDate.value);
+    const orders = response?.resultData ?? [];
+
+    stats.value = {
+      total: orders.length,
+      waiting: orders.filter(o => Number(o.state) === 0).length,
+      progress: orders.filter(o => Number(o.state) === 1).length,
+      rider: orders.filter(o => Number(o.state) === 2).length,
+      shipping: orders.filter(o => Number(o.state) === 3).length,
+      completed: orders.filter(o => Number(o.state) === 3).length,  // 배달 중 = 배달 완료 카운트에 포함 (필요시 조정)
+      cancel: orders.filter(o => Number(o.state) === 4).length
+    };
   } catch (error) {
     console.error("통계 조회 실패:", error);
   }
 };
 
-onMounted(fetchState);
+// 날짜 변경 시 통계 + 주문목록 갱신
+const onDateChange = () => {
+  fetchStats();
+};
+
+// 자식 컴포넌트(OrderList)에서 사용할 수 있도록 provide
+provide('selectedDate', selectedDate);
+provide('refreshStats', fetchStats);
+
+onMounted(fetchStats);
 
 const currentMenu = ref('order');
 
+// 달력에 표시할 포맷
 const formattedDate = computed(() => {
-  const now = new Date();
-  return `${now.getFullYear()} / ${String(now.getMonth() + 1).padStart(2, '0')} / ${String(now.getDate()).padStart(2, '0')}`;
+  const d = new Date(selectedDate.value + 'T00:00:00');
+  return `${d.getFullYear()} / ${String(d.getMonth() + 1).padStart(2, '0')} / ${String(d.getDate()).padStart(2, '0')}`;
 });
 </script>
 
@@ -47,13 +71,23 @@ const formattedDate = computed(() => {
     <main class="main-content">
       <!--주문관리 화면-->
       <template v-if="currentMenu === 'order'">
-        <div class="date-container"><span class="date-text">📅 {{ formattedDate }}</span></div>
+        <div class="date-container">
+          <label class="date-picker-wrapper">
+            <span class="date-text">📅 {{ formattedDate }}</span>
+            <input
+              type="date"
+              v-model="selectedDate"
+              @change="onDateChange"
+              class="date-input-hidden"
+            />
+          </label>
+        </div>
 
         <section class="summary-container">
-          <OrderCard title="총 주문수"     :count="stats.total"     />
-          <OrderCard title="주문수락대기"  :count="stats.waiting"   />
-          <OrderCard title="배달 완료"     :count="stats.completed" />
-          <OrderCard title="취소건수"      :count="stats.cancel"    type="cancel" />
+          <OrderCard title="총 주문수"       :count="stats.total"     />
+          <OrderCard title="주문수락대기"    :count="stats.waiting"   />
+          <OrderCard title="배달 완료"       :count="stats.completed" />
+          <OrderCard title="취소건수"        :count="stats.cancel"    type="cancel" />
         </section>
 
         <section class="order-list-section"><OrderList /></section>
@@ -74,7 +108,7 @@ const formattedDate = computed(() => {
         <AddStoreView />
       </template>
 
-      <!-- 가게관리 화면 -->  <!-- ← 추가 -->
+      <!-- 가게관리 화면 -->
       <template v-if="currentMenu === 'store'">
         <StoreManagementView />
       </template>
@@ -87,7 +121,33 @@ const formattedDate = computed(() => {
 .owner-layout { display: flex; min-height: 100vh; background-color: #f9f9f9; }
 .main-content { flex: 1; padding: 40px; }
 .date-container { display: flex; justify-content: flex-end; margin-bottom: 30px; }
-.date-text { background-color: #fff; padding: 10px 20px; border-radius: 8px; border: 1px solid #e0e0e0; font-weight: bold; color: #333; }
+
+.date-picker-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.date-text {
+  background-color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-weight: bold;
+  color: #333;
+  display: inline-block;
+}
+
+.date-input-hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .summary-container { display: flex; gap: 20px; margin-bottom: 50px; }
 .header-title { margin-bottom: 20px; }
 .chart-section { background: #fff; padding: 30px; border-radius: 20px; margin-bottom: 40px; }

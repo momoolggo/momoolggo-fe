@@ -28,8 +28,11 @@ class OwnerService {
     }
 
     // 가게 주문 조회 (state: 주문상태 필터)
-    async getOrders(storeId, state) {
-        const res = await axios.get(`${this.#url}/order`, { params: { store_id: storeId, state } });
+    async getOrders(storeId, state, date) {
+        const params = { store_id: storeId };
+            if (state != null) params.state = state;
+            if (date) params.date = date;
+        const res = await axios.get(`${this.#url}/order`, { params });
         return res.data;
     }
 
