@@ -172,6 +172,7 @@ const isOwner = computed(() => userStore.state.role === 'OWNER')
   width: 120px;
   height: auto;
   object-fit: contain;
+  margin-right: 25px;
 }
 
 .top-actions {
@@ -191,6 +192,8 @@ const isOwner = computed(() => userStore.state.role === 'OWNER')
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-top: 11px;
+  margin-right: 10px;
 }
 .nav_icon_btn:active { color: #d63031; }
 
@@ -204,6 +207,7 @@ const isOwner = computed(() => userStore.state.role === 'OWNER')
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-top: 15px;
 }
 .nav_text_btn:active { color: #d63031; }
 
@@ -212,6 +216,7 @@ const isOwner = computed(() => userStore.state.role === 'OWNER')
   font-weight: 700;
   color: #d63031;
   padding: 0 4px;
+  margin-top: 15px;
 }
 
 .row-address {
@@ -241,6 +246,7 @@ const isOwner = computed(() => userStore.state.role === 'OWNER')
 
 .address-text {
   font-size: 12px;
+  font-weight: 300;
   color: #555;
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   white-space: nowrap;

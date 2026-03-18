@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import userService from '@/services/userService'
 import NaverMap from '@/components/common/NaverMap.vue'
@@ -26,7 +26,35 @@ const state = reactive({
   idMsg: '',
   idAvailable: false,
   errorMsg: '',
-})
+
+
+  terms: {
+    all: false,
+    service: false, //서비스 이용약관
+    privacy: false, //개인정보 수집 이용
+    marketing: false, // 마케팅정보수신
+  },
+  })
+
+  //전체동의
+const toggleAll = () => {
+  const val = !state.terms.all
+  state.terms.all = val,
+  state.terms.service = val,
+  state.terms.privacy = val,
+  state.terms.marketing = val
+}
+
+// 개별체크 할때 전체 동의 상태 동기화
+const syncAll = () => {
+  state.terms.all = state.terms.service && state.terms.privacy && state.terms.marketing
+}
+
+// 필수약관동의했는지
+const requiredAgreed = computed(() => state.terms.service && state.terms.privacy)
+
+
+
 
 const onAddressSelect = ({ address, lat, lng }) => {
   state.form.address = address
@@ -138,6 +166,66 @@ const signup = async () => {
         <input v-model="state.form.birth" type="date" class="inp" />
       </div>
 
+      <div class="terms_box">
+        <label class="terms_all" @click.prevent="toggleAll">
+          <span class="custom_check" :class="{checked: state.terms.all}">
+            <i class="bi bi-check"></i>
+          </span>
+          <span class="terms_all_text">전체 동의</span>
+        </label>
+
+        <div class="terms_divider" />
+
+        <label class="terms_item">
+          <input
+            v-model="state.terms.service"
+            type="checkbox"
+            class="hidden_check"
+            @change="syncAll"/>
+            <span class="custom_check" :class="{ checked: state.terms.service }">
+            <i class="bi bi-check"></i>
+          </span>
+          <span class="terms_label">
+            서비스 이용약관 동의
+            <span class="badge required_badge">필수</span>
+          </span>
+        </label>
+ 
+        <!-- 개인정보 수집·이용 (필수) -->
+        <label class="terms_item">
+          <input
+            v-model="state.terms.privacy"
+            type="checkbox"
+            class="hidden_check"
+            @change="syncAll"
+          />
+          <span class="custom_check" :class="{ checked: state.terms.privacy }">
+            <i class="bi bi-check"></i>
+          </span>
+          <span class="terms_label">
+            개인정보 수집·이용 동의
+            <span class="badge required_badge">필수</span>
+          </span>
+        </label>
+ 
+        <!-- 마케팅 수신 (선택) -->
+        <label class="terms_item">
+          <input
+            v-model="state.terms.marketing"
+            type="checkbox"
+            class="hidden_check"
+            @change="syncAll"
+          />
+          <span class="custom_check" :class="{ checked: state.terms.marketing }">
+            <i class="bi bi-check"></i>
+          </span>
+          <span class="terms_label">
+            마케팅 정보 수신 동의
+            <span class="badge optional_badge">선택</span>
+          </span>
+        </label>
+      </div>
+
       <p v-if="state.errorMsg" class="error_msg">{{ state.errorMsg }}</p>
 
       <button class="btn_primary" @click="signup">가입하기</button>
@@ -158,11 +246,26 @@ const signup = async () => {
 .signup_page { min-height: 100vh; background: var(--primary); display: flex; align-items: center; justify-content: center; padding: 40px 16px; }
 .signup_card { background: var(--white); border-radius: var(--radius-lg); padding: 36px 32px; width: 520px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 14px; }
 .logo_wrap { text-align: center; }
-.signup_logo { height: 56px; }
+.signup_logo { height: 80px; width: 80px;}
 .signup_title { text-align: center; font-size: 20px; font-weight: 700; color: var(--black); }
 .radio_group { display: flex; gap: 20px; }
 .radio_label { font-size: 14px; color: var(--gray-dark); cursor: pointer; display: flex; align-items: center; gap: 4px; }
 .back_link { text-align: center; font-size: 13px; }
 .back_link a { color: var(--gray); text-decoration: none; }
 .back_link a:hover { color: var(--primary); }
+.terms_box { border: 1.5px solid #e8e8e8; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #fafafa;}
+ 
+/* 전체 동의 */
+.terms_all { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+.terms_all_text { font-size: 15px; font-weight: 700; color: #566572; }
+.terms_divider { height: 1px; background: #e8e8e8; margin: 0 -4px; }
+.terms_item { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+.hidden_check { display: none; }
+.custom_check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s; color: transparent; font-size: 13px }
+.custom_check.checked { background: var(--primary, #e84040); border-color: var(--primary, #e84040); color: #fff; }
+.terms_label { font-size: 14px; color: #333; display: flex; align-items: center; gap: 6px; flex: 1}
+.badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+.required_badge { background: #fff0f0; color: #e84040;}
+.optional_badge { background: #f0f0f0; color: #888;}
 </style>

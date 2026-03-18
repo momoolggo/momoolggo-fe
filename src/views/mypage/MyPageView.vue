@@ -43,7 +43,7 @@ const menus = [
 
 <style scoped>
 .mypage_wrap {
-  max-width: 720px;
+  max-width: 480px;
   margin: 40px auto;
   padding: 0 16px;
 }

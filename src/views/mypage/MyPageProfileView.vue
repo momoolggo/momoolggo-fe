@@ -144,7 +144,7 @@ const update = async () => {
 </template>
 
 <style scoped>
-.profile_wrap { max-width: 520px; margin: 40px auto; padding: 0 16px; }
+.profile_wrap { max-width: 480px; margin: 40px auto; padding: 0 16px; }
 .page_title { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
 .form_card { background: #fff; border-radius: var(--radius-lg); box-shadow:0 2px 8px rgba(0, 0, 0, 0.05); padding: 32px 28px; display: flex; flex-direction: column; gap: 16px; }
 .inp.readonly { background: #f5f5f5; color: #999; cursor: not-allowed; }

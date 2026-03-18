@@ -105,7 +105,7 @@ const open = () => {
 
 <style scoped>
 
-.empty_wrap { max-width: 640px; margin: 40px auto; padding: 0 16px; }
+.empty_wrap { max-width: 480px; margin: 40px auto; padding: 0 16px; }
 .page_title { font-size: 20px; font-weight: 700; margin-bottom: 40px; }
 .cs-page {
   max-width: 480px;

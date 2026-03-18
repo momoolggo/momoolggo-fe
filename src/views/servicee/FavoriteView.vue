@@ -130,7 +130,7 @@ const goStore = (storeId) => {
 </template>
 
 <style scoped>
-.wish-page { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
+.wish-page { max-width: 480px; margin: 0 auto; padding: 40px 20px 80px; }
 .page-title { text-align: center; font-size: 1.5rem; font-weight: 600; margin-bottom: 6px; color: #111; }
 .total-count { font-size: 0.88rem; color: #888; margin-bottom: 20px; }
 .wish-list { display: flex; flex-direction: column; gap: 16px; }
