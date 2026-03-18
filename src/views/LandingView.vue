@@ -79,7 +79,7 @@ const goOrder = () => {
       </div>
     </section>
 
-  <!--라이더 신청-->>
+  <!--라이더 신청-->
     <section class="section section_rider">
       <div class="section_inner">
         <div class="section_img_wrap">
@@ -94,7 +94,7 @@ const goOrder = () => {
             자유로운 시간에 원하는 만큼 일하세요.<br/>
             빠른 정산과 안전한 배달 환경을 제공합니다
           </p>
-          <router-link to="/rider/signin" class="btn_section">라이더 신청하기→</router-link>
+          <router-link to="/rider/signin" class="btn_section">라이더 신청하기 →</router-link>
         </div>
       </div>
     </section>
