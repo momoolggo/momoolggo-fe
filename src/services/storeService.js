@@ -50,6 +50,11 @@ class StoreService {
         const res = await axios.post(`${this.#url}/favorite`,  params );
         return res.data;
     }
+
+    async getNearbyStores(lat, lng) {
+    const res = await axios.get(`${this.#url}/nearby`, { params: { lat, lng } });
+    return res.data;
+}
 }
 
 export default new StoreService();
