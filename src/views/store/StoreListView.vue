@@ -1,7 +1,6 @@
 <script setup>
-import { computed, reactive, onMounted, ref , watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useRoute } from 'vue-router';
+import { computed, reactive, onMounted, ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import StoreCard from '@/components/store/StoreCard.vue';
 import storeService from '@/services/storeService';
 
@@ -29,7 +28,7 @@ const storeList = reactive({
     list: [],
     find: {
         searchText: '',
-        size: 10,
+        size: 5,
         currentPage: 1,
         categoryId: 0,
         maxPage: 10,
@@ -45,29 +44,36 @@ const getStores = async () => {
     };
     try {
         const result = await storeService.getStoreList(params);
-        if (result.resultData) {
-            storeList.list = result.resultData;
+        if (result && result.resultData) {
+            // 서버 응답 구조가 { list: [], totalCount: n } 일 경우를 대비
+            const data = result.resultData;
+            storeList.list = data.list || data;
+
+            // maxPage 계산 로직 (전체 개수가 올 경우)
+            const totalCount = data.totalCount || 0;
+            if (totalCount > 0) {
+                storeList.find.maxPage = Math.ceil(totalCount / storeList.find.size);
+            } else {
+                storeList.find.maxPage = 10; // 테스트용 고정값 유지 원할 시
+            }
         }
     } catch (error) {
         console.error("가게 목록 조회 실패", error);
     }
 };
 
-const changeCategory = (name) => {//카테고리 누르면 param에 카테고리 이름이 들어감
+const changeCategory = (name) => {
   router.push({
-    query: {
-      ...route.query,
-      category: name,
-    }
+    query: { ...route.query, category: name }
   });
 };
 
-const getCategoryIdByName = (name) => { //카테고리 이름을 아이디로 변경해서 반환
+const getCategoryIdByName = (name) => {
   const found = categories.find(c => c.name === name);
-  return found ? found.id : 0; // 못 찾으면 전체(0) 반환
+  return found ? found.id : 0;
 };
 
-watch(() => route.query.category, (newCategory) => {//query값 변경 감지해서 코드실행
+watch(() => route.query.category, (newCategory) => {
   storeList.find.categoryId = getCategoryIdByName(newCategory);
   storeList.find.currentPage = 1;
   getStores();
@@ -76,7 +82,7 @@ watch(() => route.query.category, (newCategory) => {//query값 변경 감지해�
 const scroll = (direction) => {
     if (scrollContainer.value) {
         scrollContainer.value.scrollBy({
-            left: direction === 'left' ? -1000 : 1000,
+            left: direction === 'left' ? -300 : 300,
             behavior: 'smooth',
         });
     }
@@ -97,9 +103,10 @@ const pageRange = computed(() => {
 onMounted(getStores);
 
 const changePage = (page) => {
+    if (page < 1 || page > storeList.find.maxPage) return;
     storeList.find.currentPage = page;
     getStores();
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 const goToDetail = (id) => {
@@ -149,20 +156,25 @@ const currentCategoryName = computed(() => {
         등록된 가게가 없습니다.
     </div>
 
-    <div class="pagination" v-if="storeList.find.maxPage > 0">
+    <div class="pagination" v-if="storeList.find.maxPage > 1">
         <button
-            :disabled="storeList.find.currentPage <= PAGE_GROUP_SIZE"
-            @click="changePage(pageRange[0] - 1)"
+            class="page-nav-btn"
+            :disabled="storeList.find.currentPage === 1"
+            @click="changePage(storeList.find.currentPage - 1)"
         >이전</button>
+
         <button
             v-for="page in pageRange"
             :key="page"
+            class="page-num"
             :class="{ active: storeList.find.currentPage === page }"
             @click="changePage(page)"
         >{{ page }}</button>
+
         <button
-            :disabled="pageRange[pageRange.length - 1] >= storeList.find.maxPage"
-            @click="changePage(pageRange[pageRange.length - 1] + 1)"
+            class="page-nav-btn"
+            :disabled="storeList.find.currentPage === storeList.find.maxPage"
+            @click="changePage(storeList.find.currentPage + 1)"
         >다음</button>
     </div>
 
@@ -170,21 +182,45 @@ const currentCategoryName = computed(() => {
 </template>
 
 <style scoped>
-.store-list-view { max-width: 480px; margin: 0 auto; background: #f8f8f8; min-height: 100vh;  }
+/* 1. 하단 패딩을 주어 네비게이션 바 공간 확보 */
+.store-list-view {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #f8f8f8;
+    min-height: 100vh;
+    padding-bottom: 120px; /* 네비바 높이(약 60px) + 여유공간 */
+    position: relative;
+}
+
 .category-nav { position: sticky; top: 0; z-index: 100; background: #fff; display: flex; align-items: center; border-bottom: 1px solid #eee; }
-.category-scroll-wrapper { display: flex; overflow-x: auto; scroll-behavior: smooth; padding: 15px 10px; scrollbar-width: none; }
+.category-scroll-wrapper { display: flex; overflow-x: auto; scroll-behavior: smooth; padding: 15px 10px; scrollbar-width: none; flex: 1; }
 .category-scroll-wrapper::-webkit-scrollbar { display: none; }
-.category-item { min-width: 80px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-bottom: 2px solid transparent; padding-bottom: 5px; }
+.category-item { min-width: 75px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-bottom: 3px solid transparent; padding-bottom: 8px; }
 .cat-icon { font-size: 24px; margin-bottom: 4px; }
 .cat-name { font-size: 13px; color: #666; }
 .category-item.active .cat-name { color: #00C7AE; font-weight: bold; }
-.category-item.active { border-bottom: 2px solid #00C7AE; }
-.nav-btn { width: 30px; height: 30px; border: none; background: rgba(255,255,255,0.8); cursor: pointer; font-size: 18px; z-index: 10; color: #333; }
+.category-item.active { border-bottom: 3px solid #00C7AE; }
+.nav-btn { width: 40px; border: none; background: #fff; cursor: pointer; font-size: 18px; color: #333; }
+
 .header { padding: 16px; background: #fff; border-bottom: 1px solid #f0f0f0; }
 .list-container { display: flex; flex-direction: column; background: #fff; }
-.empty-msg { padding: 50px; text-align: center; color: #999; background: #fff; }
-.pagination { display: flex; justify-content: center; gap: 5px; padding: 20px 0; background: #fff; }
-.pagination button { padding: 8px 12px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; }
-.pagination button.active { background: #00C7AE; color: #fff; border-color: #00C7AE; }
-.pagination button:disabled { color: #ccc; cursor: default; }
+.empty-msg { padding: 100px 20px; text-align: center; color: #999; }
+
+/* 2. 페이징 영역 스타일링 및 z-index 상향 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 40px 0;
+    background: #f8f8f8;
+    position: relative;
+    z-index: 10; /* 네비게이션 바보다 낮되 일반 요소보다는 높게 */
+}
+.page-num, .page-nav-btn {
+    min-width: 36px; height: 36px; border: 1px solid #ddd; background: #fff;
+    border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+}
+.page-num.active { background: #00C7AE; color: #fff; border-color: #00C7AE; font-weight: bold; }
+.page-nav-btn:disabled { color: #ddd; cursor: not-allowed; }
 </style>

@@ -14,16 +14,22 @@ onMounted(async () => {
 
     try {
         // ✅ 서버에 결제 승인 요청 (백엔드 /confirm 엔드포인트 필요)
-        await orderService.confirmPayment({
+        const result = await orderService.confirmPayment({
             paymentKey: state.paymentKey,
             orderId:    state.orderId,
-            amount:     state.amount,
+            amount:     Number(state.amount),
+            payState: ''
         });
+        console.log('성공 응답:', result) ;
         alert('주문이 완료되었습니다! 🎉');
         router.push('/');
     } catch (e) {
         console.error('결제 승인 실패:', e);
+        console.log('에러 전체:', e)        // ✅ 추가
+    console.log('에러 응답:', e.response?.data)  // ✅ 추가
+    console.log('에러 상태코드:', e.response?.status)
         router.push(`/payment/fail?message=${e.message}&code=${e.code}`);
+
     }
 });
 </script>

@@ -1,15 +1,14 @@
 <script setup>
-import { reactive, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
-import MenuCategory from '@/components/store/MenuCategory.vue';
-import StoreInfo from '@/components/store/StoreInfo.vue';
-import MenuDetailModal from '@/components/store/MenuModal.vue';
-import storeService from '@/services/storeService';
-import { useUserStore } from '@/stores/userStore';
-
-const route = useRoute();
-const userStore = useUserStore();
-const userNo = userStore.state.userNo;
+import { reactive, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import MenuCategory from '@/components/store/MenuCategory.vue'
+import StoreInfo from '@/components/store/StoreInfo.vue'
+import MenuDetailModal from '@/components/store/MenuModal.vue'
+import storeService from '@/services/storeService'
+import { useUserStore } from '@/stores/userStore'
+const route = useRoute()
+const userStore = useUserStore()
+const userNo = userStore.state.userNo
 
 const getImageUrl = (path) => {
   if (!path) return null
@@ -25,69 +24,76 @@ const state = reactive({
   review: [],
   isModalOpen: false,
   isWished: false,
-});
+})
 
 const getStoreDetail = async () => {
-  const storeId = Number(route.params.id);
-  const params = { userNo: userNo, storeId: storeId };
-  try {
-    const res = await storeService.getStore(storeId);
-    state.storeInfo = res.resultData;
-    const result = await storeService.checkFavorite(params);
-    state.isWished = result.resultData || false;
-  } catch (error) {
-    console.error("가게데이터 로드 실패:", error);
+  const storeId = Number(route.params.id)
+  const params = {
+    userNo: userNo,
+    storeId: storeId,
   }
-};
+  try {
+    const res = await storeService.getStore(storeId)
+    state.storeInfo = res.resultData
+    const result = await storeService.checkFavorite(params)
+    state.isWished = result.resultData || false
+  } catch (error) {
+    console.error('가게데이터 로드 실패:', error)
+  }
+}
 
 const getMenuList = async () => {
-  const storeId = route.params.id;
+  const storeId = route.params.id
   try {
-    const res = await storeService.getMenuList(storeId);
-    state.menuList = res.resultData || [];
+    const res = await storeService.getMenuList(storeId)
+    state.menuList = res.resultData || []
   } catch (error) {
-    console.error("메뉴 데이터 로드 실패:", error);
+    console.error('메뉴 데이터 로드 실패:', error)
   }
-};
+}
 
 const toggleWish = async () => {
-  const params = { userNo: userNo, storeId: Number(route.params.id) };
-  try {
-    const result = await storeService.toggleFavorite(params);
-    state.isWished = result.resultData;
-  } catch (error) {
-    console.error("찜 처리 중 오류 발생:", error);
-    alert("요청 처리에 실패했습니다.");
+  const params = {
+    userNo: userNo,
+    storeId: Number(route.params.id),
   }
-};
+  try {
+    const result = await storeService.toggleFavorite(params)
+    state.isWished = result.resultData
+  } catch (error) {
+    console.error('찜 처리 중 오류 발생:', error)
+    alert('요청 처리에 실패했습니다.')
+  }
+}
 
 const groupedMenu = computed(() => {
-  const result = [];
-  state.menuList.forEach(menu => {
-    const categoryName = menu.categoryName || '기타 메뉴';
-    let group = result.find(g => g.name === categoryName);
+  const result = []
+  state.menuList.forEach((menu) => {
+    const categoryName = menu.categoryName || '기타 메뉴'
+    let group = result.find((g) => g.name === categoryName)
     if (!group) {
-      group = { name: categoryName, items: [] };
-      result.push(group);
+      group = { name: categoryName, items: [] }
+      result.push(group)
     }
-    group.items.push(menu);
-  });
-  return result;
-});
+    group.items.push(menu)
+  })
+  return result
+})
 
 onMounted(() => {
-  getStoreDetail();
-  getMenuList();
-});
+  getStoreDetail()
+  getMenuList()
+  // getReviewList();
+})
 
 const openMenuModal = (menu) => {
-  state.selectedMenu = menu;
-  state.isModalOpen = true;
-};
+  state.selectedMenu = menu
+  state.isModalOpen = true
+}
 
-const handleAddToCart = () => {
-  state.isModalOpen = false;
-};
+const handleAddToCart = (item) => {
+  state.isModalOpen = false
+}
 </script>
 
 <template>
@@ -134,9 +140,15 @@ const handleAddToCart = () => {
     </section>
 
     <nav class="detail-tabs">
-      <button :class="{ active: state.activeTab === 'menu' }" @click="state.activeTab = 'menu'">메뉴</button>
-      <button :class="{ active: state.activeTab === 'info' }" @click="state.activeTab = 'info'">가게정보</button>
-      <button :class="{ active: state.activeTab === 'review' }" @click="state.activeTab = 'review'">리뷰</button>
+      <button :class="{ active: state.activeTab === 'menu' }" @click="state.activeTab = 'menu'">
+        메뉴
+      </button>
+      <button :class="{ active: state.activeTab === 'info' }" @click="state.activeTab = 'info'">
+        가게정보
+      </button>
+      <button :class="{ active: state.activeTab === 'review' }" @click="state.activeTab = 'review'">
+        리뷰
+      </button>
     </nav>
 
     <div class="tab-content-area">
@@ -157,7 +169,10 @@ const handleAddToCart = () => {
       <div v-if="state.activeTab === 'review'" class="review-container">
         <div class="review-summary">
           <p v-if="state.review.length === 0">아직 작성된 리뷰가 없습니다.</p>
-          <p v-else>총 <strong>{{ state.review.length }}</strong>개의 리뷰가 있습니다.</p>
+          <p v-else>
+            총 <strong>{{ state.review.length }}</strong
+            >개의 리뷰가 있습니다.
+          </p>
         </div>
       </div>
     </div>
@@ -173,6 +188,7 @@ const handleAddToCart = () => {
 </template>
 
 <style scoped>
+/* 전체 컨테이너 */
 .store-detail-view {
   width: 100%;
   background: #fff;
