@@ -16,8 +16,8 @@ class OwnerService {
     }
 
     // 가게 운영정보 수정 (영업중/휴무 등)
-    async updateStoreStatus(statusData) {
-        const res = await axios.patch(`${this.#url}/store/status`, statusData);
+        async updateStoreStatus(statusData) {
+        const res = await axios.put(`${this.#url}/store/status`, statusData);
         return res.data;
     }
 
@@ -29,7 +29,7 @@ class OwnerService {
 
     // 가게 주문 조회 (state: 주문상태 필터)
     async getOrders(storeId, state) {
-    const res = await axios.get(`${this.#url}/order`, { params: { store_id: storeId, state } });
+        const res = await axios.get(`${this.#url}/order`, { params: { store_id: storeId, state } });
         return res.data;
     }
 
@@ -57,21 +57,60 @@ class OwnerService {
         return res.data;
     }
 
-    //로그인 후 가게 정보 조회 (가게 있으면 주문관리, 없으면 입점신청)
+    // 로그인 후 가게 정보 조회
     async getMyStore() {
-    const res = await axios.get(`${this.#url}/store`)
-    return res.data
+        const res = await axios.get(`${this.#url}/store`);
+        return res.data;
     }
 
-    //매출관리
+    // 매출관리
     async getSalesStats(period) {
         const res = await axios.get(`${this.#url}/sales/stats`, { params: { period } });
-    return res.data;
+        return res.data;
     }
 
     async getSalesRanking(period) {
         const res = await axios.get(`${this.#url}/sales/ranking`, { params: { period } });
-    return res.data;
+        return res.data;
+    }
+
+    // 메뉴 목록 조회
+    async getMenus(storeId) {
+        const res = await axios.get(`${this.#url}/menu`, { params: { storeId } });
+        return res.data;
+    }
+
+    // 카테고리 목록 조회
+    async getCategories(storeId) {
+        const res = await axios.get(`${this.#url}/category`, { params: { storeId } });
+        return res.data;
+    }
+
+    // 카테고리 추가
+    async addCategory(storeId, category) {
+        const res = await axios.post(`${this.#url}/category`, { storeId, category });
+        return res.data;
+    }
+
+    // 카테고리 수정
+    async updateCategory(categoryId, category) {
+        const res = await axios.put(`${this.#url}/category`, { categoryId, category });
+        return res.data;
+    }
+
+    // 카테고리 삭제
+    async deleteCategory(categoryId) {
+        const res = await axios.delete(`${this.#url}/category/${categoryId}`);
+        return res.data;
+    }
+
+    // ↓↓↓ 새로 추가된 부분 ↓↓↓
+    // 메뉴 이미지 업로드
+    async uploadMenuImage(formData) {
+        const res = await axios.post(`${this.#url}/menu/image`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return res.data;
     }
 }
 

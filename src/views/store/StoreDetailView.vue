@@ -10,6 +10,12 @@ const route = useRoute()
 const userStore = useUserStore()
 const userNo = userStore.state.userNo
 
+const getImageUrl = (path) => {
+  if (!path) return null
+  if (path.startsWith('http') || path.startsWith('blob')) return path
+  return `http://localhost:8080${path}`
+}
+
 const state = reactive({
   storeInfo: {},
   menuList: [],
@@ -45,16 +51,6 @@ const getMenuList = async () => {
     console.error('메뉴 데이터 로드 실패:', error)
   }
 }
-
-// const getReviewList = async () => {
-//     const storeId = route.params.id;
-//     try {
-//         const res = await storeService.getReviewList(storeId);
-//         state.review = res.resultData || [];
-//     } catch (error) {
-//         console.error("리뷰 데이터 로드 실패:", error);
-//     }
-// };
 
 const toggleWish = async () => {
   const params = {
@@ -99,17 +95,25 @@ const handleAddToCart = (item) => {
   state.isModalOpen = false
 }
 </script>
+
 <template>
   <div class="store-detail-view">
     <section class="store-cover">
-      <img :src="state.storeInfo.storePic || '/images/default-store.png'" class="cover-img" />
+      <img
+        :src="getImageUrl(state.storeInfo.storePic) || '/images/default-store.png'"
+        class="cover-img"
+      />
       <button class="back-btn" @click="$router.back()">←</button>
     </section>
 
     <section class="store-header-info">
       <div class="title-row">
         <h1>{{ state.storeInfo.storeName }}</h1>
-        <button class="wish-btn" :class="{ 'is-active': state.isWished }" @click="toggleWish">
+        <button
+          class="wish-btn"
+          :class="{ 'is-active': state.isWished }"
+          @click="toggleWish"
+        >
           <span class="heart-icon">{{ state.isWished ? '♥' : '♡' }}</span>
         </button>
       </div>
@@ -174,10 +178,11 @@ const handleAddToCart = (item) => {
     </div>
 
     <MenuDetailModal
-      :menu="state.selectedMenu"
-      :is-open="state.isModalOpen"
-      @close="state.isModalOpen = false"
-      @add-to-cart="handleAddToCart"
+    :menu="state.selectedMenu"
+    :is-open="state.isModalOpen"
+    :min-price="state.storeInfo.minPrice"
+    @close="state.isModalOpen = false"
+    @add-to-cart="handleAddToCart"
     />
   </div>
 </template>
@@ -189,25 +194,15 @@ const handleAddToCart = (item) => {
   background: #fff;
   min-height: 100vh;
   max-width: 480px;
-  padding-bottom: 60px; /* 하단 네비게이션 바 공간 */
+  padding-bottom: 60px;
 }
-
-/* 상단 커버 이미지 */
-.store-cover {
-  position: relative;
-  width: 100%;
-  height: 250px;
-}
-.cover-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.store-cover { position: relative; width: 100%; height: 250px; }
+.cover-img { width: 100%; height: 100%; object-fit: cover; }
 .back-btn {
   position: absolute;
   top: 15px;
   left: 15px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0,0,0,0.3);
   color: white;
   border: none;
   border-radius: 50%;
@@ -216,120 +211,22 @@ const handleAddToCart = (item) => {
   font-size: 1.2rem;
   cursor: pointer;
 }
-
-/* 가게 정보 섹션 */
-.store-header-info {
-  padding: 24px 20px;
-  text-align: left; /* 이미지 디자인은 좌측 정렬 기반 */
-}
-
-.title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.title-row h1 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin: 0;
-  color: #111;
-}
-
-.wish-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
-.heart-icon {
-  font-size: 1.8rem;
-  color: #ccc;
-}
-.wish-btn.is-active .heart-icon {
-  color: #ff5252;
-}
-
-.rating-row {
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.star {
-  color: #ffd700;
-  font-weight: bold;
-}
-.review-count {
-  color: #222;
-  font-weight: 500;
-}
-
-/* 배달 상세 정보 (Grid 레이아웃) */
-.delivery-spec-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-top: 15px;
-  border-top: 1px solid #f5f5f5;
-}
-
-.spec-item {
-  display: flex;
-  align-items: center;
-  font-size: 0.95rem;
-}
-
-.spec-item .label {
-  width: 100px;
-  color: #666;
-}
-
-.spec-item .val {
-  color: #222;
-  font-weight: 500;
-}
-
-/* 탭 바 스타일 */
-.detail-tabs {
-  display: flex;
-  border-bottom: 1px solid #eee;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.detail-tabs button {
-  flex: 1;
-  padding: 14px 0;
-  border: none;
-  background: none;
-  color: #999;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.detail-tabs button.active {
-  color: #111;
-  font-weight: 700;
-  border-bottom: 3px solid #111;
-}
-
-/* 탭 컨텐츠 영역 */
-.tab-content-area {
-  background: #f8f9fa; /* 메뉴 카드 구분을 위한 연회색 배경 */
-  padding: px;
-}
-
-.review-summary {
-  background: #fff;
-  padding: 20px;
-  text-align: center;
-  color: #666;
-  border-radius: 12px;
-}
+.store-header-info { padding: 24px 20px; text-align: left; }
+.title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.title-row h1 { font-size: 1.6rem; font-weight: 800; margin: 0; color: #111; }
+.wish-btn { background: none; border: none; cursor: pointer; padding: 5px; }
+.heart-icon { font-size: 1.8rem; color: #ccc; }
+.wish-btn.is-active .heart-icon { color: #ff5252; }
+.rating-row { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 4px; }
+.star { color: #FFD700; font-weight: bold; }
+.review-count { color: #222; font-weight: 500; }
+.delivery-spec-grid { display: flex; flex-direction: column; gap: 10px; padding-top: 15px; border-top: 1px solid #f5f5f5; }
+.spec-item { display: flex; align-items: center; font-size: 0.95rem; }
+.spec-item .label { width: 100px; color: #666; }
+.spec-item .val { color: #222; font-weight: 500; }
+.detail-tabs { display: flex; border-bottom: 1px solid #eee; background: #fff; position: sticky; top: 0; z-index: 10; }
+.detail-tabs button { flex: 1; padding: 14px 0; border: none; background: none; color: #999; font-size: 1rem; font-weight: 500; cursor: pointer; }
+.detail-tabs button.active { color: #111; font-weight: 700; border-bottom: 3px solid #111; }
+.tab-content-area { background: #f8f9fa; }
+.review-summary { background: #fff; padding: 20px; text-align: center; color: #666; border-radius: 12px; }
 </style>

@@ -214,9 +214,11 @@ const handleOrder = async () => {
 <style scoped>
 /* 모바일 고정 레이아웃 최적화 */
 .order-page {
+  max-width: 480px;
   width: 100%;
   padding: 20px 16px 100px; /* 하단 네비게이션 고려 여백 */
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .order-title {
