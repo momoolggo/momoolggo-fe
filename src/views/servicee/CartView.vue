@@ -148,7 +148,7 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
         <div class="empty-cart-wrapper">
           <div class="empty-content">
             <div class="empty-icon-circle">
-              <span class="empty-emoji">⚠️</span>
+              <span class="empty-emoji">⚠</span>
             </div>
             <h3 class="empty-main-text">담은 메뉴가 없습니다</h3>
             <p class="empty-sub-text">코이보타루의 맛있는 메뉴를 구경해보세요!</p>
@@ -169,6 +169,7 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
   min-height: 100vh;
   max-width: 480px;
   padding-bottom: 100px;
+  margin: 0 auto;
 }
 
 .cart-title {
@@ -254,8 +255,8 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
   align-items: center;
 }
 .empty-icon-circle {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   background-color: #fff;
   border-radius: 50%;
   display: flex;
@@ -264,18 +265,18 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
   box-shadow: 0 10px 25px rgba(0,0,0,0.05);
   margin-bottom: 24px;
 }
-.empty-emoji { font-size: 4rem; }
+.empty-emoji { font-size: 3rem; }
 .empty-main-text { font-size: 1.5rem; font-weight: 800; color: #333; margin-bottom: 8px; }
 .empty-sub-text { font-size: 1rem; color: #999; margin-bottom: 30px; }
 .go-shopping-btn {
-  padding: 18px 60px;
-  background: #4A90E2;
-  color: #fff;
+  padding: 15px 60px;
+  background: #ffffff;
+  color: #ef1935;
   border: none;
-  border-radius: 35px;
+  border-radius: 20px;
   font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
+  box-shadow: 0 8px 20px rgba(228, 228, 228, 0.3);
 }
 </style>

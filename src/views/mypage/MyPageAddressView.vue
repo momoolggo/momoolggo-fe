@@ -157,7 +157,7 @@ const setDefault = async (addressId) => {
 
 <style scoped>
 .address_wrap {
-  max-width: 680px;
+  max-width: 480px;
   margin: 40px auto;
   padding: 0 16px;
 }

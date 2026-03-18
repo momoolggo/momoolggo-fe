@@ -23,9 +23,9 @@ const categories = [
 
 // 배너
 const banners = [
-  { img: '/src/assets/배너1.png', route: '/event'    },
-  { img: '/src/assets/배너2.png', route: '/whatKind' },
-  { img: '/src/assets/배너3.png', route: '/whatKind'},
+  { img: '/src/assets/광고1.png', route: '/event'    },
+  { img: '/src/assets/광고2.png', route: '/whatKind' },
+  { img: '/src/assets/광고3.png', route: '/whatKind'},
 ]
 
 // 현재 배너(인디케이터용)
@@ -162,8 +162,8 @@ function goCategory(label) {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.8);
@@ -175,10 +175,10 @@ function goCategory(label) {
   justify-content: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
-.banner-nav-btn.left  { left: 8px;  }
-.banner-nav-btn.right { right: 8px; }
+.banner-nav-btn.left  { left: 8px; opacity: 0.5; }
+.banner-nav-btn.right { right: 8px; opacity: 0.5; }
 .banner-nav-btn:active { background: rgba(255, 255, 255, 1); }
- 
+
 
 /* ── 인디케이터 ── */
 .dots {
@@ -258,6 +258,7 @@ function goCategory(label) {
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-top:30px;
 }
 .view-all-btn:active {
   background: #f0f0f0;
