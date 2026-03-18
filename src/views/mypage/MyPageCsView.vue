@@ -68,8 +68,7 @@ const open = () => {
         :key="tab"
         class="tab-btn"
         :class="{ active: activeTab === tab }"
-        @click="changeTab(tab)"
-      >
+        @click="changeTab(tab)">
         {{ tab }}
       </button>
     </div>
