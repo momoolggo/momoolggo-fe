@@ -109,8 +109,11 @@ const changePage = (page) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-const goToDetail = (id) => {
-    router.push(`/store/${id}`);
+const goToDetail = (store) => {
+    if (store.state === 0){
+        return
+    }
+    router.push(`/store/${store.id}`);
 };
 
 const currentCategoryName = computed(() => {
@@ -148,7 +151,7 @@ const currentCategoryName = computed(() => {
             v-for="store in storeList.list"
             :key="store.id"
             :store="store"
-            @click="goToDetail(store.id)"
+            @click="goToDetail(store)"
         />
     </div>
 
@@ -198,10 +201,10 @@ const currentCategoryName = computed(() => {
 .category-item { min-width: 75px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-bottom: 3px solid transparent; padding-bottom: 8px; }
 .cat-icon { font-size: 24px; margin-bottom: 4px; }
 .cat-name { font-size: 13px; color: #666; }
-.category-item.active .cat-name { color: #b1150a; font-weight: bold; }
-.category-item.active { border-bottom: 3px solid #af0707; }
+.category-item.active .cat-name { color:#a40C0b; font-weight: bold; }
+.category-item.active { border-bottom: 3px solid#a40C0b; }
 .nav-btn { width: 40px; border: none; background: #fff; cursor: pointer; font-size: 18px; color: #333; }
-
+.store-closed { opacity: 0.45; filter: grayscale(60%); cursor: not-allowed; pointer-events: none;}
 .header { padding: 16px; background: #fff; border-bottom: 1px solid #f0f0f0; }
 .list-container { display: flex; flex-direction: column; background: #fff; }
 .empty-msg { padding: 100px 20px; text-align: center; color: #999; }
@@ -221,6 +224,6 @@ const currentCategoryName = computed(() => {
     min-width: 36px; height: 36px; border: 1px solid #ddd; background: #fff;
     border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
 }
-.page-num.active { background: #a70101; color: #fff; border-color: #ac0303; font-weight: bold; }
+.page-num.active { background: #a40C0b; color: #fff; border-color: #a40C0b; font-weight: bold; }
 .page-nav-btn:disabled { color: #ddd; cursor: not-allowed; }
 </style>

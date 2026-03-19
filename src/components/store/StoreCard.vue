@@ -16,7 +16,10 @@ const getImageUrl = (path) => {
 </script>
 
 <template>
-  <div class="store-card" @click="$emit('click', store.id)">
+  <div class="store-card" :class="{ 'is_closed': store.state === 0 }"@click="$emit('click', store)">
+    <div v-if="store.state === 0" class="closed-overlay">
+      <span class="closed-badge"> 준비중이예요🤗</span>
+    </div>
     <img
       :src="getImageUrl(store.pic) || '/images/default-store.png'"
       class="store-thumbnail"
@@ -54,6 +57,34 @@ const getImageUrl = (path) => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: transform 0.2s ease;
+  position: relative;
+}
+.is-closed {
+  cursor: not-allowed;
+  filter: grayscale(80%);
+  opacity: 0.7;
+}
+
+.closed-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.closed-badge {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: #383434;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 .store-card:hover { transform: translateY(-2px); }
 .store-thumbnail { width: 100px; height: 100px; border-radius: 12px; object-fit: cover; }
@@ -63,6 +94,6 @@ const getImageUrl = (path) => {
 .rating { color: #ffb800; font-weight: bold; }
 .highlight { color: #ff3d00; font-weight: 600; }
 .delivery-info { font-size: 0.9rem; color: #888; display: flex; align-items: center; }
-.tip-badge { color: #066649; font-weight: 600; }
+.tip-badge { color: #169750; font-weight: 600; }
 .divider { margin: 0 8px; color: #eee; font-size: 0.8rem; }
 </style>

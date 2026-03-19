@@ -90,7 +90,7 @@ const goToDetail = (id) => {
 .nearby-wrap {
   max-width: 480px;
   margin: 0 auto;
-  background: #f8f8f8;
+  background: #ffffff;
   min-height: 100vh;
   padding-bottom: 80px;
 }
@@ -149,8 +149,8 @@ const goToDetail = (id) => {
 
 .distance-badge {
   position: absolute;
-  bottom: 20px;
-  right: 28px;
+  bottom: 105px;
+  right: 50px;
   background: #fff;
   border: 1.5px solid #eee;
   border-radius: 20px;
@@ -158,6 +158,6 @@ const goToDetail = (id) => {
   font-size: 12px;
   font-weight: 600;
   color: #555;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 </style>
