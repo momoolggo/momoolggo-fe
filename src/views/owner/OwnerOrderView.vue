@@ -69,16 +69,17 @@ const formattedDate = computed(() => {
       <!--주문관리 화면-->
       <template v-if="currentMenu === 'order'">
         <div class="date-container">
-          <label class="date-picker-wrapper">
-            <span class="date-display">📅 {{ formattedDate }}</span>
-            <input
-              type="date"
-              v-model="selectedDate"
-              @change="onDateChange"
-              class="date-input"
-            />
-          </label>
-        </div>
+  <div class="date-picker-wrapper" @click="$refs.datePicker.showPicker()">
+    <span class="date-display">📅 {{ formattedDate }}</span>
+    <input
+      type="date"
+      v-model="selectedDate"
+      @change="onDateChange"
+      class="date-input"
+      ref="datePicker"
+    />
+  </div>
+</div>
 
         <section class="summary-container">
           <OrderCard title="총 주문수"     :count="stats.total"     />

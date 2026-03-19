@@ -1,7 +1,15 @@
 <script setup>
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import orderService from '@/services/orderService'
+import CartView from './CartView.vue'
+import { useUserStore } from '@/stores/userStore'
+import cartService from '@/services/cartService'
+
+const userStore = useUserStore()
+const userNo = computed(() => userStore.state.userNo)
+
+
 
 const router = useRouter()
 
@@ -109,6 +117,8 @@ const handleOrder = async () => {
     })
     const orderId = String(orderRes.orderId)
     console.log('주문 저장 성공, orderId:', orderId)
+
+    await cartService.clearCart(userNo.value)
 
     // ✅ 2. payState 저장 (success 페이지에서 사용)
     sessionStorage.setItem('payState', state.payState)
