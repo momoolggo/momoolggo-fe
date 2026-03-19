@@ -196,7 +196,7 @@ function spinAgain() {
 
 <style scoped>
 .roulette-page {
-  max-width: 600px;
+  max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
   background: #f8f8f8;

@@ -109,8 +109,11 @@ const changePage = (page) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-const goToDetail = (id) => {
-    router.push(`/store/${id}`);
+const goToDetail = (store) => {
+    if (store.state === 0){
+        return
+    }
+    router.push(`/store/${store.id}`);
 };
 
 const currentCategoryName = computed(() => {
@@ -148,7 +151,7 @@ const currentCategoryName = computed(() => {
             v-for="store in storeList.list"
             :key="store.id"
             :store="store"
-            @click="goToDetail(store.id)"
+            @click="goToDetail(store)"
         />
     </div>
 
@@ -201,7 +204,7 @@ const currentCategoryName = computed(() => {
 .category-item.active .cat-name { color: #00C7AE; font-weight: bold; }
 .category-item.active { border-bottom: 3px solid #00C7AE; }
 .nav-btn { width: 40px; border: none; background: #fff; cursor: pointer; font-size: 18px; color: #333; }
-
+.store-closed { opacity: 0.45; filter: grayscale(60%); cursor: not-allowed; pointer-events: none;}
 .header { padding: 16px; background: #fff; border-bottom: 1px solid #f0f0f0; }
 .list-container { display: flex; flex-direction: column; background: #fff; }
 .empty-msg { padding: 100px 20px; text-align: center; color: #999; }

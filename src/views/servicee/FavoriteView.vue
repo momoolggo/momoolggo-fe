@@ -151,7 +151,7 @@ const goStore = (storeId) => {
 <style scoped>
 /* 전체 레이아웃 */
 .wish-page { max-width: 480px; margin: 0 auto; padding: 20px 16px 100px; background: #fff; min-height: 100vh; }
-.page-title { text-align: center; font-size: 1.3rem; font-weight: 800; margin-bottom: 5px; color: #111; }
+.page-title { text-align: left; font-size: 1.3rem; font-weight: 800; margin-bottom: 5px; color: #111; }
 .total-count { font-size: 0.9rem; color: #888; margin-bottom: 20px; text-align: left; }
 
 .wish-list { display: flex; flex-direction: column; gap: 14px; }
