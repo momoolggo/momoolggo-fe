@@ -113,12 +113,13 @@ const goToAddStore = () => {
   left: 50%;
   transform: translateX(-50%);
   width: 220px;
+  max-height: 300px;
+  overflow-y: auto;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   z-index: 100;
-  overflow: hidden;
 }
 
 .store-option {
