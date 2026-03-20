@@ -120,6 +120,14 @@ class OwnerService {
         });
         return res.data;
     }
+
+    // 가게 이미지 업로드
+    async uploadStoreImage(formData) {
+        const res = await axios.post(`${this.#url}/store/image`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return res.data;
+    }
 }
 
 export default new OwnerService();
