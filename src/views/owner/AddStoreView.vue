@@ -40,12 +40,21 @@ const handleCancel = () => router.back();
 
 const triggerFileUpload = () => fileInput.value.click();
 
-const onFileChange = (e) => {
+const onFileChange = async (e) => {
   const file = e.target.files[0];
-  if (file) {
-    const imageUrl = URL.createObjectURL(file);
-    previewImage.value = imageUrl;
-    state.form.storePic = imageUrl;  // 문자열 경로로 저장
+  if (!file) return;
+
+  previewImage.value = URL.createObjectURL(file);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await ownerService.uploadStoreImage(formData);
+    state.form.storePic = res.resultData;  // /uploads/store/uuid_파일명.jpg
+  } catch {
+    await showAlert('이미지 업로드에 실패했습니다.', { title: '오류', type: 'error' });
+    previewImage.value = null;
+    state.form.storePic = '';
   }
 };
 
@@ -72,8 +81,17 @@ const submit = async () => {
 
     await ownerService.registerStore(data);
 
-    const res = await ownerService.getMyStores()
-    store.setStore(state.form.storeName);
+    // 가게 목록 갱신
+    const res = await ownerService.getMyStores();
+    const stores = res.resultData || [];
+    store.setStores(stores);
+
+    // 새로 등록한 가게를 선택 (목록의 마지막)
+    if (stores.length > 0) {
+      const newStore = stores[stores.length - 1];
+      store.setStore(newStore.storeName, newStore.storeId);
+    }
+
     await showAlert('가게 등록이 완료되었습니다.', { title: '등록 완료', type: 'success' })
     router.push('/ownerservice');
   } catch (err) {
