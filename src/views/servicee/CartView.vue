@@ -19,6 +19,13 @@ const state = reactive({
 
 const debounceTimers = {};
 
+const getImageUrl = (path) => {
+  if (!path) return null
+  if (path.startsWith('data:')) return path      // ← Base64 data URI 지원 추가
+  if (path.startsWith('http') || path.startsWith('blob')) return path
+  return `http://localhost:8080${path}`
+}
+
 const loadCart = async () => {
     try {
         const res = await cartService.getCartList(userNo.value);
@@ -111,7 +118,7 @@ const goStore = () => state.storeId ? router.push(`/store/${state.storeId}`) : r
 
         <section class="cart-items-card">
           <div v-for="item in state.cartItems" :key="item.id" class="cart-item">
-            <img :src="item.menuPic || '/images/default-menu.png'" class="item-img" />
+            <img :src="getImageUrl(item.menuPic) || '/images/default-menu.png'" class="item-img" />
             <div class="item-info">
               <div class="item-name">{{ item.menuName }}</div>
               <div class="item-price">가격: {{ item.price.toLocaleString() }}원</div>

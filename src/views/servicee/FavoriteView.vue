@@ -16,6 +16,13 @@ const state = reactive({
   pageSize: 6,
 });
 
+const getImageUrl = (path) => {
+  if (!path) return null
+  if (path.startsWith('data:')) return path      // ← Base64 data URI 지원 추가
+  if (path.startsWith('http') || path.startsWith('blob')) return path
+  return `http://localhost:8080${path}`
+}
+
 const loadWishList = async () => {
   const params = {
     userNo: userStore.state.userNo,
@@ -85,7 +92,7 @@ const goStore = (storeId) => {
         class="wish-card"
         @click="goStore(store.id)"
       >
-        <img :src="store.pic || '/images/default-store.png'" class="store-img" :alt="store.name" />
+        <img :src="getImageUrl(store.pic) || '/images/default-store.png'" class="store-img" :alt="store.name" />
 
         <div class="card-body">
           <div class="card-header">
@@ -113,7 +120,7 @@ const goStore = (storeId) => {
             <span class="check-icon">✓</span>
             <span class="delivery-tip">배달팁 1,500원</span>
             <span class="divider">|</span>
-            <span class="min-order">15,000원 이상 배달</span>
+            <span class="min-order">{{ (store.min || 0).toLocaleString() }}원 이상 배달</span>
           </div>
         </div>
       </div>
