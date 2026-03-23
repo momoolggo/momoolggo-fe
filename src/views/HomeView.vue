@@ -23,9 +23,9 @@ const categories = [
 
 // 배너
 const banners = [
-  { img: '/src/assets/배너.png', route: '/event'    },
-  { img: '/src/assets/광고2.png', route: '/whatKind' },
-  { img: '/src/assets/광고3.png', route: '/whatKind'},
+  { img: '/image/배너.png', route: '/event'    },
+  { img: '/image/광고2.png', route: '/whatKind' },
+  { img: '/image/광고3.png', route: '/whatKind'},
 ]
 
 // 현재 배너(인디케이터용)
@@ -97,7 +97,7 @@ function goCategory(label) {
           class="category-item"
           @click="goCategory(cat.label)"
         >
-          <img :src="`/src/assets/${cat.img}.png`" :alt="cat.label" />
+          <img :src="`/image/${cat.img}.png`" :alt="cat.label" />
           <span>{{ cat.label }}</span>
         </div>
       </div>
