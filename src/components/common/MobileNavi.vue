@@ -71,11 +71,11 @@ const goTo = (page) => {
   background-size: contain;
   background-repeat: no-repeat;
 }
-.icon-home { background-image: url('/src/assets/홈.png'); }
-.icon-map { background-image: url('/src/assets/주변찾기.png'); }
-.icon-heart { background-image: url('/src/assets/찜.png'); }
-.icon-pencil { background-image: url('/src/assets/고객센터.png'); }
-.icon-user { background-image: url('/src/assets/마이페이지.png'); }
+.icon-home { background-image: url('/image/홈.png'); }
+.icon-map { background-image: url('/image/주변찾기.png'); }
+.icon-heart { background-image: url('/image/찜.png'); }
+.icon-pencil { background-image: url('/image/고객센터.png'); }
+.icon-user { background-image: url('/image/마이페이지.png'); }
 
 .nav-item span {
   font-size: 12px;

@@ -167,7 +167,7 @@ const progressWidth = computed(() => (currentStepIndex.value / (steps.value.leng
             ></div>
           </div>
           <div class="bike-icon" :style="{ left: progressWidth }">
-            <img src="/src/assets/배달 현황 이모티콘.png" alt="bike" />
+            <img src="/image/delivery.png" alt="bike" />
           </div>
         </div>
 
