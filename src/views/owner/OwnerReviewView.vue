@@ -206,13 +206,17 @@ const submitReport = async () => {
 .review_content { font-size: 15px; color: #444; line-height: 1.7; margin: 0; }
 .review_img_wrap { margin-top: 4px; }
 .review_img { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; }
-.owner_comment { background: #f8f8f8; border-left: 3px solid #3f51b5; border-radius: 8px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
-.comment_label { font-size: 12px; font-weight: 700; color: #3f51b5; }
+
+.owner_comment { background: #f8f8f8; border-left: 3px solid #2d61da; border-radius: 8px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+.comment_label { font-size: 12px; font-weight: 700; color: #2d61da; }
+
 .comment_text { font-size: 14px; color: #555; margin: 0; line-height: 1.6; }
 .review_actions { display: flex; gap: 10px; margin-top: 4px; }
-.btn_comment { padding: 8px 18px; border: 1.5px solid #3f51b5; border-radius: 8px; background: #fff; color: #3f51b5; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-.btn_comment:hover { background: #3f51b5; color: #fff; }
+
+.btn_comment { padding: 8px 18px; border: 1.5px solid #2d61da; border-radius: 8px; background: #fff; color: #2d61da; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.btn_comment:hover { background: #2d61da; color: #fff; }
 .btn_report { padding: 8px 18px; border: 1.5px solid #ef4444; border-radius: 8px; background: #fff; color: #ef4444; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+
 .btn_report:hover:not(:disabled) { background: #ef4444; color: #fff; }
 .btn_report:disabled { border-color: #ccc; color: #ccc; cursor: not-allowed; }
 .modal_overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 200; }
@@ -222,11 +226,12 @@ const submitReport = async () => {
 .modal_close { background: none; border: none; font-size: 18px; cursor: pointer; color: #aaa; }
 .modal_desc { font-size: 13px; color: #666; margin: 0; line-height: 1.6; }
 .modal_textarea { width: 100%; height: 120px; padding: 12px; border: 1.5px solid #ddd; border-radius: 12px; font-size: 14px; resize: none; box-sizing: border-box; font-family: inherit; }
-.modal_textarea:focus { outline: none; border-color: #3f51b5; }
+.modal_textarea:focus { outline: none; border-color: #2d61da; }
 .char_count { font-size: 12px; color: #bbb; text-align: right; margin-top: -8px; }
 .modal_footer { display: flex; gap: 10px; justify-content: flex-end; }
-.btn_cancel { padding: 10px 24px; border: 1.5px solid #ddd; border-radius: 10px; background: #fff; color: #666; font-size: 14px; cursor: pointer; }
-.btn_primary { padding: 10px 24px; border: none; border-radius: 10px; background: #3f51b5; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn_cancel { padding: 12px 24px; border: 1.5px solid #ddd; border-radius: 10px; background: #fff; color: #666; font-size: 14px; cursor: pointer; white-space: nowrap;}
+.btn_primary { padding: 10px 24px; border: none; border-radius: 10px; background: #2d61da; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn_primary:hover { background-color: #2d61da;}
 .btn_report_submit { padding: 10px 24px; border: none; border-radius: 10px; background: #ef4444; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
 .reason_list { display: flex; flex-direction: column; gap: 8px; }
 .reason_item { padding: 10px 16px; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; color: #444; cursor: pointer; transition: all 0.15s; }
