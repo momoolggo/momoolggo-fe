@@ -2,6 +2,12 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+const getImageUrl = (path) => {
+  if (!path) return '/images/default-store.png'
+  if (path.startsWith('http') || path.startsWith('blob') || path.startsWith('data:')) return path
+  return `http://localhost:8080${path}`
+}
+
 const router = useRouter();
 
 const props = defineProps({
@@ -41,7 +47,7 @@ const goToPost = () => {
 
     <div class="store-info">
       <div class="store-profile">
-        <img :src="storeImage" alt="store" class="store-img" />
+        <img :src="getImageUrl(storeImage)" alt="store" class="store-img" />
         <div class="store-name-row">
           <h3 class="store-name">{{ storeName }}</h3>
         </div>
